@@ -16,6 +16,7 @@ if __name__ == "__main__":
         git_path = os.path.join(app_dir, '.git')
         svn_path = os.path.join(app_dir, '.svn')
         mtn_path = os.path.join(app_dir, '_MTN')
+        hg_path  = os.path.join(app_dir, '.hg')
         if os.path.lexists(svn_path):
             print "Updating svn %s" % app_dir
             os.chdir(app_dir)
@@ -29,6 +30,11 @@ if __name__ == "__main__":
             os.chdir(app_dir)
             call(['mtn', 'pull'])
             call(['mtn', 'update'])
+        elif os.path.lexists(hg_path):
+            print "Updating hg %s" % app_dir
+            os.chdir(app_dir)
+            call(['hg', 'pull'])
+            call(['hg', 'update'])
         else:
             continue
 
