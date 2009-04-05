@@ -44,12 +44,15 @@ if [ $# -eq 1 ]; then
         echo "`basename $0`: error, \"$1\" does not exist or is not a directory."
         parse_error
     fi
-
-    ##
-    # Switch to the directory specified.  All commands issued from here on out
-    # will be relative to this working directory.
-    cd $1
+else
+    $1 = "."
 fi
+
+
+##
+# Switch to the directory specified.  All commands issued from here on out
+# will be relative to this working directory.
+pushd $1 > /dev/null
 
 ##
 # Some sanity checks... the directory django-reuse should not exist, nor
@@ -87,6 +90,10 @@ ln -s django-reuse/bin/reuse.py django-reuse.py
 ##
 # Any further initialization will be handled by django-reuse.py
 python django-reuse.py init
+
+##
+# Restore current working directory.
+popd > /dev/null
 
 ##
 # End of File
