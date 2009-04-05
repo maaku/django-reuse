@@ -8,10 +8,9 @@ project's INSTALLED_APPS setting and instantly add functionality to a site
 without any need for manual configuration.  However the key words here are
 *careful design*.  The vision of reusable applications that are easy to drop
 into a project and painless to use is only realizable only if certain design
-constraints and conventions are decided upon and rigorously adhered to.
-
-However, Django by default is not very amenable to reusability.  This has been
-summarized fairly well by Brantley Harris (AKA, deadwisdom):
+constraints and conventions are decided upon and rigorously adhered to.  The
+problems have been summarized fairly well by Brantley Harris (AKA,
+deadwisdom):
 
 “The default django project layout leaves much to be desired.  It mixes
  applications in folders with project settings, assumes a global django folder
