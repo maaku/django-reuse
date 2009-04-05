@@ -68,7 +68,7 @@ fi
 # local workstation, then we can clone the repository which will let the user
 # easily update django-reuse later.  Otherwise we'll just download the latest
 # tarball.
-if [ `which gita` ]; then
+if [ `which git` ]; then
     echo "git exists :) cloning django-reuse..."
     git clone git://github.com/maaku/django-reuse.git
 else
