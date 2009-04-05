@@ -68,13 +68,25 @@ fi
 # local workstation, then we can clone the repository which will let the user
 # easily update django-reuse later.  Otherwise we'll just download the latest
 # tarball.
-if [ `which git` ]; then
+if [ `which gita` ]; then
     echo "git exists :) cloning django-reuse..."
     git clone git://github.com/maaku/django-reuse.git
 else
     echo "git not found :( downloading django-reuse tarball..."
-    
+    wget http://github.com/maaku/django-reuse/tarball/master
+    tar zxvf *-django-reuse-*.tar.gz
+    rm -f *-django-reuse-*.tar.gz
+    mv *-django-reuse-* django-reuse
 fi
+
+##
+# Now the repository exists in the directory django-reuse.  We'll create a
+# symbolic link to the script django-reuse/bin/reuse.py
+ln -s django-reuse/bin/reuse.py django-reuse.py
+
+##
+# Any further initialization will be handled by django-reuse.py
+python django-reuse.py init
 
 ##
 # End of File
