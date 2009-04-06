@@ -5,55 +5,32 @@
 # django-reuse: bin/reuse.py
 ##
 
-import sys
-import getopt
-
+##
+# For ease of maintainability, the functionlity of django-reuse.py is split
+# across the bin/reuse module.  So the first thing we need to do is add this
+# module to PYTHONPATH.  A little bit of os.path magic is all that's required.
 import os
-import os.path
-from subprocess import call
+import sys
+script_name = __file__
+script_path = os.path.dirname(__file__)
+script_full = os.path.join(script_path, script_name)
+script      = os.path.realpath(script_full)
+script_base = script[:-len(".py")]
+sys.path.append(script_base)
 
-def update():
-    apps_dir = os.path.abspath('.')
-    for app_name in os.listdir(apps_dir):
-        app_dir = os.path.abspath(os.path.join(apps_dir, app_name))
-        git_path = os.path.join(app_dir, '.git')
-        svn_path = os.path.join(app_dir, '.svn')
-        mtn_path = os.path.join(app_dir, '_MTN')
-        hg_path  = os.path.join(app_dir, '.hg')
-        if os.path.lexists(svn_path):
-            print "Updating svn %s" % app_dir
-            os.chdir(app_dir)
-            call(['svn', 'update'])
-        elif os.path.lexists(git_path):
-            print "Updating git %s" % app_dir
-            os.chdir(app_dir)
-            call(['git', 'pull'])
-        elif os.path.lexists(mtn_path):
-            print "Updating mtn %s" % app_dir
-            os.chdir(app_dir)
-            call(['mtn', 'pull'])
-            call(['mtn', 'update'])
-        elif os.path.lexists(hg_path):
-            print "Updating hg %s" % app_dir
-            os.chdir(app_dir)
-            call(['hg', 'pull'])
-            call(['hg', 'update'])
-        else:
-            continue
-
-COPYRIGHT="2009"
-VERSION_BUILD="1"
-VERSION_MAJOR="0"
-VERSION_MINOR="0"
-VERSION_PATCH="0"
-VERSION_SHORT=".".join((VERSION_MAJOR,VERSION_MINOR,VERSION_PATCH))
-VERSION_LONG="-".join((VERSION_SHORT,VERSION_BUILD))
+##
+#
+import reuse
+ARGS = { "basename":  sys.argv[0],
+         "copyright": reuse.COPYRIGHT,
+         "version":   reuse.VERSION_LONG,
+         "license":   "FIXME" }
 
 def usage():
     print """
 Usage: %(basename)s <command> [options]
 Try \'%(basename)s --help\' for more information.
-""" % { "basename":  sys.argv[0] }; sys.exit(0)
+""".strip() % ARGS; sys.exit(0)
 
 def help():
     print """
@@ -75,7 +52,7 @@ Options:
 
 If \'-h\', \'--help\', \'--version\', or \'--license\' is specified, no action is
 performed, regardless of any other parameters that may also be specified.
-""" % { "basename":  sys.argv[0] }; sys.exit(0)
+""".strip() % ARGS; sys.exit(0)
 
 def version():
     print """
@@ -83,9 +60,7 @@ def version():
 Copyright (c) %(copyright)s by its contributors and distributed
 under the terms of the GNU Affero General Public License, version 3
 Try \'%(basename)s --license\' for more information.
-""" % { "basename":  sys.argv[0],
-        "version":   VERSION_LONG,
-        "copyright": COPYRIGHT }; sys.exit(0)
+""".strip() % ARGS; sys.exit(0)
 
 def license():
     print """
@@ -94,39 +69,31 @@ Copyright (c) %(copyright)s by its contributors and distributed
 under the terms of the GNU Affero General Public License, version 3
 
 %(license)s
-""" % { "basename":  sys.argv[0],
-        "version":   VERSION_LONG,
-        "copyright": COPYRIGHT,
-        "license":   "FIXME" }; sys.exit(0)
+""".strip() % ARGS; sys.exit(0)
 
-if __name__ == "__main__":
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "version", "license"])
-    except getopt.GetoptError:
-        usage()
-        sys.exit(-1)
+##
+#　Handle basic usage- and info-related commands.
+import getopt
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "version", "license"])
+except getopt.GetoptError:
+    usage()
+    sys.exit(-1)
 
-    ##
-    # Handle command line arguments and options.
-    opt_h       = False
-    opt_help    = False
-    opt_version = False
-    opt_license = False
-    for opt, arg in opts:
-        if opt=="-h":        opt_h       = True
-        if opt=="--help":    opt_help    = True
-        if opt=="--version": opt_version = True
-        if opt=="--license": opt_license = True
+opt_h       = False
+opt_help    = False
+opt_version = False
+opt_license = False
+for opt, arg in opts:
+    if opt=="-h":        opt_h   = True
+    if opt=="--help":    opt_help= True
+    if opt=="--version": opt_version = True
+    if opt=="--license": opt_license = True
 
-    if opt_help:    help()
-    if opt_h:       usage()
-    if opt_license: license()
-    if opt_version: version()
-
-    for arg in args:
-        print arg
-
-    print os.path.dirname(__file__)
+if opt_help:    help()
+if opt_h:       usage()
+if opt_license: license()
+if opt_version: version()
 
 ##
 # End of File
