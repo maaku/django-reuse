@@ -1,0 +1,14 @@
+::
+: django-licensing: COPYRIGHT.txt
+::
+
+If you have contributed to django-reuse, you deserve to be on this list.
+Contact us (see: AUTHORS) and we'll add you.
+
+django-reuse is Copyright (C) 2009 by the following:
+
+Mark Friedenbach
+
+::
+: End of File
+::
