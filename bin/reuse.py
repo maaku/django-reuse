@@ -8,7 +8,8 @@
 ##
 # For ease of maintainability, the functionlity of django-reuse.py is split
 # across the bin/reuse module.  So the first thing we need to do is add this
-# module to PYTHONPATH.  A little bit of os.path magic is all that's required.
+# module to PYTHONPATH.  A little bit of sys.path magic is all that's
+# required.
 import os
 import sys
 script_name = __file__
