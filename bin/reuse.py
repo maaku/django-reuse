@@ -127,13 +127,22 @@ for arg in sys.argv[1:]:
 if cmd == None:
     print ("""
 %(basename)s: nothing to do; exiting.
-%(basename)s: try \'%(basename)s --help\' for more information.
+%(basename)s: try \'%(basename)s --help\' for usage information.
+"""% ARGS).strip(); sys.exit(0)
+
+##
+# See if command is valid (subscript exists)
+subscript = os.path.join(script_base, "".join([cmd,".py"]))
+if os.path.exists(subscript) != True:
+    ARGS["cmd"]=cmd
+    print ("""
+%(basename)s: unrecognized command \'%(cmd)s\'.
+%(basename)s: try \'%(basename)s --help\' for a list of valid commands.
 """% ARGS).strip(); sys.exit(0)
 
 ##
 # Execute command
 from subprocess import call
-subscript = os.path.join(script_base, "".join([cmd,".py"]))
 call_args = ["python", subscript]
 call_args.extend(sys.argv)
 call(call_args)
