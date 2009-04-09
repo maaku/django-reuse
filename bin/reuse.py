@@ -136,7 +136,7 @@ subscript = os.path.join(script_base, "".join([cmd,".py"]))
 if os.path.exists(subscript) != True:
     ARGS["cmd"]=cmd
     print ("""
-%(basename)s: unrecognized command \'%(cmd)s\'.
+%(basename)s: unrecognized subcommand \'%(cmd)s\'.
 %(basename)s: try \'%(basename)s --help\' for a list of valid commands.
 """% ARGS).strip(); sys.exit(0)
 
