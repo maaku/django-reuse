@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 ##
-# django-reuse: bin/reuse/help.py
+# django-reuse: bin/reuse/update.py
 ##
 
 """
-docstring for __init__.py
+docstring for update.py
 """
 
 import sys
@@ -46,16 +46,7 @@ def update():
             continue
 
 if __name__ == "__main__":
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "version", "license"])
-    except getopt.GetoptError:
-        usage()
-        sys.exit(-1)
-
-    for arg in args:
-        print arg
-
-    print os.path.dirname(__file__)
+    pass
 
 ##
 # End of File
