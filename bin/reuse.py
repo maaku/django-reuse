@@ -3,7 +3,19 @@
 
 ##
 # django-reuse: bin/reuse.py
+#
+# A tool for managing reusable django applications, application dependencies,
+# projects which use reusable applications, and the creation of a development
+# environment that encourages and support reusability.
 ##
+
+COPYRIGHT     = "2009"
+VERSION_BUILD = "1"
+VERSION_MAJOR = "0"
+VERSION_MINOR = "0"
+VERSION_PATCH = "0"
+VERSION_SHORT = ".".join((VERSION_MAJOR,VERSION_MINOR,VERSION_PATCH))
+VERSION_LONG  = "-".join((VERSION_SHORT,VERSION_BUILD))
 
 ##
 # For ease of maintainability, the functionlity of django-reuse.py is split
@@ -17,24 +29,31 @@ script_path = os.path.dirname(__file__)
 script_full = os.path.join(script_path, script_name)
 script      = os.path.realpath(script_full)
 script_base = script[:-len(".py")]
-sys.path.append(script_base)
+sys.path.insert(0,script_base)
+
+licname = os.path.join(script_base,"..","..","COPYING.txt")
+try:
+    licfile = open(licname, 'r')
+    license = licfile.read()
+    licfile.close()
+except:
+    license = "Error reading license file %s..." % licname
 
 ##
 #
-import reuse
-ARGS = { "basename":  sys.argv[0],
-         "copyright": reuse.COPYRIGHT,
-         "version":   reuse.VERSION_LONG,
-         "license":   "FIXME" }
+ARGS = { "basename":  os.path.basename(sys.argv[0]),
+         "copyright": COPYRIGHT,
+         "version":   VERSION_LONG,
+         "license":   license }
 
 def usage():
-    print """
+    print ("""
 Usage: %(basename)s <command> [options]
 Try \'%(basename)s --help\' for more information.
-""".strip() % ARGS; sys.exit(0)
+"""% ARGS).strip(); sys.exit(0)
 
 def help():
-    print """
+    print ("""
 Usage: %(basename)s <command> [options]
 
 Options:
@@ -53,24 +72,24 @@ Options:
 
 If \'-h\', \'--help\', \'--version\', or \'--license\' is specified, no action is
 performed, regardless of any other parameters that may also be specified.
-""".strip() % ARGS; sys.exit(0)
+"""% ARGS).strip(); sys.exit(0)
 
 def version():
-    print """
+    print ("""
 %(basename)s - Django Reusability Tool - version %(version)s
 Copyright (c) %(copyright)s by its contributors and distributed
 under the terms of the GNU Affero General Public License, version 3
 Try \'%(basename)s --license\' for more information.
-""".strip() % ARGS; sys.exit(0)
+"""% ARGS).strip(); sys.exit(0)
 
 def license():
-    print """
-%(basename)s - Darknet Client Application - version %(version)s
+    print ("""
+%(basename)s - Django Reusability Tool - version %(version)s
 Copyright (c) %(copyright)s by its contributors and distributed
 under the terms of the GNU Affero General Public License, version 3
 
 %(license)s
-""".strip() % ARGS; sys.exit(0)
+"""% ARGS).strip(); sys.exit(0)
 
 ##
 #　Handle basic usage- and info-related commands.
