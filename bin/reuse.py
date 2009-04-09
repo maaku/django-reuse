@@ -24,10 +24,7 @@ VERSION_LONG  = "-".join((VERSION_SHORT,VERSION_BUILD))
 # required.
 import os
 import sys
-script_name = __file__
-script_path = os.path.dirname(__file__)
-script_full = os.path.join(script_path, script_name)
-script      = os.path.realpath(script_full)
+script      = os.path.realpath(__file__)
 script_base = script[:-len(".py")]
 sys.path.insert(0,script_base)
 
@@ -122,6 +119,31 @@ if opt_help:    help()
 if opt_h:       usage()
 if opt_license: license()
 if opt_version: version()
+
+##
+# See if there is anything to do
+if len(args) < 1:
+    print ("""
+%(basename)s: nothing to do; exiting.
+%(basename)s: try \'%(basename)s --help\' for more information.
+"""% ARGS).strip(); sys.exit(0)
+
+##
+# Extract command, removing it from the list of arguments.
+cmd = args[0].strip().lower()
+sys.argv.remove(args[0])
+
+##
+# Handle the case of a help command with no options.
+if len(args) == 1 and cmd == "help":
+    help()
+
+##
+# Execute command
+from subprocess import call
+call_args = ["python", os.path.join(script_base, "".join([cmd,".py"]))]
+call_args.extend(sys.argv)
+call(call_args)
 
 ##
 # End of File
