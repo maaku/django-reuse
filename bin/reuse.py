@@ -138,7 +138,7 @@ if os.path.exists(subscript) != True:
     print ("""
 %(basename)s: unrecognized subcommand \'%(cmd)s\'.
 %(basename)s: try \'%(basename)s --help\' for a list of valid commands.
-"""% ARGS).strip(); sys.exit(0)
+"""% ARGS).strip(); sys.exit(-1)
 
 ##
 # Execute command
