@@ -97,18 +97,11 @@ under the terms of the GNU Affero General Public License, version 3
 
 ##
 #　Handle basic usage- and info-related commands.
-import getopt
-try:
-    opts, args = getopt.getopt(sys.argv[1:], "h", ["usage", "help", "version", "license"])
-except getopt.GetoptError:
-    usage()
-    sys.exit(-1)
-
 opt_h       = False
 opt_help    = False
 opt_version = False
 opt_license = False
-for opt, arg in opts:
+for opt in sys.argv[1:]:
     if opt=="-h":        opt_h       = True
     if opt=="--usage":   opt_h       = True
     if opt=="--help":    opt_help    = True
@@ -121,27 +114,27 @@ if opt_license: license()
 if opt_version: version()
 
 ##
+# Extract command, removing it from the list of arguments.
+cmd = None
+for arg in sys.argv[1:]:
+    if arg.startswith("-") != True:
+        cmd = arg.strip().lower()
+        sys.argv.remove(arg)
+        break
+
+##
 # See if there is anything to do
-if len(args) < 1:
+if cmd == None:
     print ("""
 %(basename)s: nothing to do; exiting.
 %(basename)s: try \'%(basename)s --help\' for more information.
 """% ARGS).strip(); sys.exit(0)
 
 ##
-# Extract command, removing it from the list of arguments.
-cmd = args[0].strip().lower()
-sys.argv.remove(args[0])
-
-##
-# Handle the case of a help command with no options.
-if len(args) == 1 and cmd == "help":
-    help()
-
-##
 # Execute command
 from subprocess import call
-call_args = ["python", os.path.join(script_base, "".join([cmd,".py"]))]
+subscript = os.path.join(script_base, "".join([cmd,".py"]))
+call_args = ["python", subscript]
 call_args.extend(sys.argv)
 call(call_args)
 
