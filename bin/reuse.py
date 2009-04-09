@@ -31,6 +31,10 @@ script      = os.path.realpath(script_full)
 script_base = script[:-len(".py")]
 sys.path.insert(0,script_base)
 
+##
+# The license string is read from the file COPYING.txt in the root of the
+# django-reuse project directory.  The contents of this file is output in
+# response to the user specified '--license' option.
 licname = os.path.join(script_base,"..","..","COPYING.txt")
 try:
     licfile = open(licname, 'r')
@@ -40,7 +44,9 @@ except:
     license = "Error reading license file %s..." % licname
 
 ##
-#
+# The functions usage(), help(), version(), and license() handle the user
+# specified options '-h' and '--usage', '--help', '--version', and '--license'
+# respectfully.
 ARGS = { "basename":  os.path.basename(sys.argv[0]),
          "copyright": COPYRIGHT,
          "version":   VERSION_LONG,
