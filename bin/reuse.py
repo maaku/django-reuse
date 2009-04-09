@@ -57,21 +57,22 @@ def help():
 Usage: %(basename)s <command> [options]
 
 Options:
-  -h         Display a short usage statement and exit.  All other arguments
-             except \'--help\' are ignored.
+   -h        Display a short usage statement and exit.  All other arguments
+  --usage    except \'--help\' are ignored.
 
   --help     Display this help message and exit.  All other arguments are
              ignored.
 
   --version  Display copyright and version information and then exit.  All
-             other arguments except \'-h\', \'--help\', and \'--license\' are
-             ignored.
+             other arguments except \'-h\'/\'--usage\', \'--help\', and \'--license\'
+             are ignored.
 
   --license  Display copyright and license then exit.  All other arguments
-             except \'-h\' and \'--help\' are ignored.
+             except \'-h\'/\'--usage\' and \'--help\' are ignored.
 
-If \'-h\', \'--help\', \'--version\', or \'--license\' is specified, no action is
-performed, regardless of any other parameters that may also be specified.
+If \'-h\', \'--usage\', \'--help\', \'--version\', or \'--license\' is specified, no
+action is performed, regardless of any other parameters that may also be
+specified.
 """% ARGS).strip(); sys.exit(0)
 
 def version():
@@ -95,7 +96,7 @@ under the terms of the GNU Affero General Public License, version 3
 #　Handle basic usage- and info-related commands.
 import getopt
 try:
-    opts, args = getopt.getopt(sys.argv[1:], "h", ["help", "version", "license"])
+    opts, args = getopt.getopt(sys.argv[1:], "h", ["usage", "help", "version", "license"])
 except getopt.GetoptError:
     usage()
     sys.exit(-1)
@@ -105,8 +106,9 @@ opt_help    = False
 opt_version = False
 opt_license = False
 for opt, arg in opts:
-    if opt=="-h":        opt_h   = True
-    if opt=="--help":    opt_help= True
+    if opt=="-h":        opt_h       = True
+    if opt=="--usage":   opt_h       = True
+    if opt=="--help":    opt_help    = True
     if opt=="--version": opt_version = True
     if opt=="--license": opt_license = True
 
