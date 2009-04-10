@@ -1,5 +1,5 @@
 ::
-: django-licensing: COPYRIGHT.txt
+: django-reuse: COPYRIGHT.txt
 ::
 
 If you have contributed to django-reuse, you deserve to be on this list.
