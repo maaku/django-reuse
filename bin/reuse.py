@@ -76,7 +76,17 @@ Options:
 If \'-h\', \'--usage\', \'--help\', \'--version\', or \'--license\' is specified, no
 action is performed, regardless of any other parameters that may also be
 specified.
-"""% ARGS).strip(); sys.exit(0)
+
+The following commands are recognized (use \'%(basename)s help <command>\'
+to get detailed documentation of each command):
+"""% ARGS).strip();
+    import re
+    print ""
+    for filename in os.listdir(script_base):
+        if not re.match(r"^.*.py$", filename) or filename == "__init__.py":
+            continue
+        print "    %s" % filename[:-len(".py")]
+    sys.exit(0)
 
 def version():
     print ("""
