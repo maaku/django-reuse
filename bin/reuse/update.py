@@ -13,12 +13,13 @@ docstring for update.py
 # Boilerplate
 import os
 import sys
-script     = os.path.basename(sys.argv[1])
+script     =                  sys.argv[1]
+scriptbase = os.path.basename(sys.argv[1])
 subcommand = os.path.basename(sys.argv[0])
 subcommand = subcommand[:-len(".py")]
 del sys.argv[1]
 
-ARGS = { "script":     script,
+ARGS = { "script":     scriptbase,
          "subcommand": subcommand }
 
 from subprocess import call
