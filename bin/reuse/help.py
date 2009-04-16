@@ -7,6 +7,13 @@
 
 """
 docstring for help.py
+
+THIS SHOULD NEVER BE VISIBLE.  If you got this message by calling
+'django-reuse.py help' or 'django-reuse.py help help' then there is something
+wrong with the django-reuse help command, and you'd be doing everyone a great
+favor if you report it.
+
+FIXME: Add website location for user to report this error.
 """
 
 ##
