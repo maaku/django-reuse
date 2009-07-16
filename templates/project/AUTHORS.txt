@@ -1,0 +1,12 @@
+::
+: $PROJECT_NAME$: AUTHORS.txt
+::
+
+This file contains a list of active developers of $PROJECT_NAME$.  See the file COPYRIGHT.txt for a full list of contributers and other copyright holders.
+
+$AUTHOR_NAME$
+  Email: $AUTHOR_EMAIL$
+
+::
+: End of File
+::
