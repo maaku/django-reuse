@@ -6,7 +6,7 @@
 ##
 
 """
-Usage: startproject [OPTIONS] projectname [directory]
+Usage: startproject projectname [directory]
 
 Creates a django project in the directory specified, and configures the
 project to abide by django best practices and to make the integration of
@@ -17,14 +17,9 @@ directory exists and creating the project would overwrite any files in that
 directory, an error will be reported and no action performed.
 
 If directory is not specified, the project will be created in a new directory
-called 'site-projectname', where projectname is the project name specified.
-An error will be reported and no action performed if 'site-projectname'
+called 'proj-projectname', where projectname is the project name specified.
+An error will be reported and no action performed if 'proj-projectname'
 already exists.
-
-Options:
-   -h        Show this help message and exit.
-  --help
-  --usage
 """
 
 ##
@@ -39,6 +34,122 @@ del sys.argv[1]
 
 ARGS = { "script":     scriptbase,
          "subcommand": subcommand }
+
+##
+# dir_walk() takes a single directory as an argument and returns a list of all
+# the files found by walking that directory hierarchy.  The relative paths of
+# those files are included, but not the original directory.
+#
+# This function is used by is_safe_pdir() to see if there is any overlap
+# between pdir (the user specified project directory) and tdir (the template
+# directory which contains the skeleton project).
+def dir_walk(dir):
+    fils = []
+    dirs = [dir]
+    pfix = os.path.join(dir, '')
+    while len(dirs)>0:
+        dir = dirs.pop()
+        for name in os.listdir(dir):
+            # Hack: ignore .git and .svn folders, and .gitignore file
+            if (name == ".git") or (name == ".svn") or (name == ".gitignore"):
+                continue
+            fullpath = os.path.join(dir, name)
+            if os.path.isfile(fullpath):
+                fils.append(fullpath[len(pfix):])
+            else:
+                dirs.append(fullpath)
+    return fils
+
+##
+# Checks that a directory is safe to use as the target of a directory copy
+# operation.  Namely, it checks that the template directory exists, and that
+# if the target directory exists that there are no name conflicts between both
+# directory structures.  In technical speak, it makes sure that the set
+# intersection of the two deep file hierarchies is zero..
+def is_safe_pdir(pdir):
+    safe = True
+
+    if os.path.exists(pdir):
+        # For now the project template directory is hard coded.  That should
+        # change in the future.
+        tdir = os.path.join(os.path.dirname(os.path.realpath(script)),"..","templates","project")
+
+        # Sanity check
+        if not os.path.exists(tdir):
+            print ("""
+%(subcommand)s: project template directory could not be found.
+%(subcommand)s: this should never happen!  please file a bug report.
+%(subcommand0s: ignore any errors that follow.              
+"""% ARGS).strip()
+            safe = False
+
+        tfiles = set(dir_walk(tdir))
+        pfiles = set(dir_walk(pdir))
+        isect = tfiles.intersection(pfiles)
+        if len(isect)>0:
+            ARGS["pdir"] = pdir
+            ARGS["isect"] = ", ".join(list(isect))
+            print ("""
+%(subcommand)s: cowardly refusing to overwrite files in %(pdir)s.
+%(subcommand)s: files which exist in both locations:
+%(subcommand)s: %(isect)s
+"""% ARGS).strip()
+            safe = False
+
+    return safe
+
+##
+# Command line processing.  The format of the command line for startproject is
+# just complex enough to make this difficult to read, but also too simple to
+# justify an external command line parser.
+#
+# See the docstring at the head of this file for a description of the command
+# line structure of startproject.
+def parse_args():
+    fail = False
+
+    if len(sys.argv) > 1:
+        for opt in sys.argv[1:]:
+            if opt[0] == '-':
+                fail = True
+                ARGS["opt"] = opt
+                sys.argv.remove(opt)
+                print ("""
+%(subcommand)s: unrecognized option \'%(opt)s\'.
+"""% ARGS).strip()
+
+    if len(sys.argv) > 1:
+        pname = sys.argv[1]
+    else:
+        pname = raw_input("Enter project name: ")
+
+    if len(sys.argv) > 2:
+        pdir = sys.argv[2]
+    else:
+        pdir = "-".join(["proj",pname])
+
+    if not is_safe_pdir(pdir):
+        fail = True
+        ARGS["pdir"] = pdir
+        print ("""
+%(subcommand)s: \'%(pdir)s\' cannot be used as a project directory.
+"""% ARGS).strip()
+
+    if len(sys.argv) > 3:
+        fail = True
+        print ("""
+%(subcommand)s: too many arguments (expected max. 2).
+"""% ARGS).strip()
+
+    if fail == True:
+        print ("""
+%(subcommand)s: try \'%(script)s help %(subcommand)s\' for more information.
+"""% ARGS).strip(); sys.exit(-1)
+
+    return pname, pdir
+
+if __name__ == "__main__":
+    pname, pdir = parse_args()
 
 ##
 # End of File
