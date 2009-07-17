@@ -7,8 +7,7 @@
 
 # Django settings for $PROJECT_NAME$.
 
-DEBUG = False
-TEMPLATE_DEBUG = DEBUG
+DEBUG = True
 
 ADMINS = (
     ('$AUTHOR_NAME$', '$AUTHOR_EMAIL$'),
@@ -53,7 +52,7 @@ USE_I18N = True
 # to support media serving for development purposes
 import os
 MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','media'))
-MEDIA_SERVE = False
+MEDIA_SERVE = True
 MEDIA_URL = '/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
@@ -100,6 +99,8 @@ try:
     from settings_local import *
 except:
     pass
+
+TEMPLATE_DEBUG = DEBUG
 
 ##
 # End of File

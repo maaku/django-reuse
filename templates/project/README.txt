@@ -15,6 +15,13 @@ INSTALL
 
 To start a new Django project, begin by modifying the *.txt documentation files in the project's root directory to fit your needs.  Then, in the root directory of the new project add a 'django' symlink to the identically named 'django' subdirectory of whichever version of Django you choose to use for this project.  And that's it, you're done.
 
+Note that the newly created project is by default created with development settings.  To enable production settings, create a 'settings_local.py' file in the 'project' directory with the following two lines:
+
+  DEBUG = False
+  MEDIA_SERVE = False
+
+The settings_local.py file will automatically be loaded after settings.py is evaluated.  It is advised to keep settings_local.py outside of version control, and to use different versions of this file in development and production environments.
+
 USAGE
 -----
 
