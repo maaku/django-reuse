@@ -88,6 +88,19 @@ fi
 ln -s django-reuse/bin/reuse.py django-reuse.py
 
 ##
+# FIXME: this should be moved to 'django-reuse.py init'
+if [ `which svn` ]; then
+    echo "svn exists ;) checking out Django-trunk..."
+    svn co http://code.djangoproject.com/svn/django/trunk Django-trunk
+fi
+
+wget http://www.djangoproject.com/download/1.0.2/tarball/
+tar zxvf Django-1.0.2-final.tar.gz
+
+wget http://media.djangoproject.com/releases/1.1/Django-1.1-beta-1.tar.gz
+tar zxvf Django-1.1-beta-1.tar.gz
+
+##
 # Any further initialization will be handled by django-reuse.py
 python django-reuse.py init
 
