@@ -151,6 +151,7 @@ def parse_args():
 if __name__ == "__main__":
     import re
     import random
+    import shutil
 
     pname, pdir = parse_args()
     tdir = template_dir("project")
@@ -169,14 +170,17 @@ if __name__ == "__main__":
         except:
             pass
 
-        file = open(os.path.join(tdir,tfile),"r")
+        tfilename = os.path.join(tdir,tfile)
+        pfilename = os.path.join(pdir,tfile)
+        file = open(tfilename,"r")
         text = file.read()
         file.close()
         for (find, repl) in res:
             text = text.replace(find, repl)
-        file = open(os.path.join(pdir,tfile),"w")
+        file = open(pfilename,"w")
         file.write(text)
         file.close()
+        shutil.copymode(tfilename,pfilename)
 
 ##
 # End of File
