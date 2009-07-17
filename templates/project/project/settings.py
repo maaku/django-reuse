@@ -8,12 +8,17 @@
 # Django settings for $PROJECT_NAME$.
 
 DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     ('$AUTHOR_NAME$', '$AUTHOR_EMAIL$'),
 )
-
 MANAGERS = ADMINS
+
+# Added by Mark Friedenbach 17 Jul 2009
+# to support enabling admin through simple config
+ADMIN = True
+ADMIN_DOC = ADMIN
 
 DATABASE_ENGINE = 'sqlite3'    # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'dev.db'       # Or path to database file if using sqlite3.
@@ -95,12 +100,19 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 )
 
+# Added by Mark Friedenbach 17 Jul 2009
+# to enable admin with simple configuration changes
+if ADMIN == True:
+    INSTALLED_APPS = ('django.contrib.admin',
+        ) + INSTALLED_APPS
+if ADMIN_DOC == True:
+    INSTALLED_APPS = ('django.contrib.admindoc',
+        ) + INSTALLED_APPS
+
 try:
     from settings_local import *
 except:
     pass
-
-TEMPLATE_DEBUG = DEBUG
 
 ##
 # End of File
