@@ -60,20 +60,20 @@ def dir_walk(dir):
                 dirs.append(fullpath)
     return fils
 
+def template_dir(name):
+    return os.path.join(os.path.dirname(os.path.realpath(script)),"..","templates",name)
+
 ##
 # Checks that a directory is safe to use as the target of a directory copy
 # operation.  Namely, it checks that the template directory exists, and that
 # if the target directory exists that there are no name conflicts between both
 # directory structures.  In technical speak, it makes sure that the set
 # intersection of the two deep file hierarchies is zero..
-def is_safe_pdir(pdir):
+def is_safe_pdir(pdir, tname):
     safe = True
 
     if os.path.exists(pdir):
-        # For now the project template directory is hard coded.  That should
-        # change in the future.
-        tdir = os.path.join(os.path.dirname(os.path.realpath(script)),"..","templates","project")
-
+        tdir = template_dir(tname)
         # Sanity check
         if not os.path.exists(tdir):
             print ("""
@@ -128,7 +128,7 @@ def parse_args():
     else:
         pdir = "-".join(["proj",pname])
 
-    if not is_safe_pdir(pdir):
+    if not is_safe_pdir(pdir, "project"):
         fail = True
         ARGS["pdir"] = pdir
         print ("""
@@ -149,7 +149,32 @@ def parse_args():
     return pname, pdir
 
 if __name__ == "__main__":
+    import re
+
     pname, pdir = parse_args()
+    tdir = template_dir("project")
+    tfiles = set(dir_walk(tdir))
+
+    res = [ (r"$PROJECT_NAME$", pname),
+            (r"$PROJECT_NAME_DOUBLE_DASH$", "".zfill(len(pname)).replace("0","=")),
+            (r"$AUTHOR_NAME$",  raw_input('Please enter author\'s name:  ')),
+            (r"$AUTHOR_EMAIL$", raw_input('Please enter author\'s email: ')),
+          ]
+
+    for tfile in tfiles:
+        try:
+            os.makedirs(os.path.dirname(os.path.join(pdir,tfile)))
+        except:
+            pass
+
+        file = open(os.path.join(tdir,tfile),"r")
+        text = file.read()
+        file.close()
+        for (find, repl) in res:
+            text = text.replace(find, repl)
+        file = open(os.path.join(pdir,tfile),"w")
+        file.write(text)
+        file.close()
 
 ##
 # End of File
