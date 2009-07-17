@@ -56,13 +56,13 @@ pushd $1 > /dev/null
 
 ##
 # Some sanity checks... the directory django-reuse should not exist, nor
-# should the file django-reuse.py.
+# should the file reuse.py.
 if [ -e "django-reuse" ]; then
     echo "`basename $0`: error, file/directory django-reuse already exists."
     exit
 fi
-if [ -e "django-reuse.py" ]; then
-    echo "`basename $0`: error, file/directory django-reuse.py already exists."
+if [ -e "reuse.py" ]; then
+    echo "`basename $0`: error, file/directory reuse.py already exists."
     exit
 fi
 
@@ -85,10 +85,10 @@ fi
 ##
 # Now the repository exists in the directory django-reuse.  We'll create a
 # symbolic link to the script django-reuse/bin/reuse.py
-ln -s django-reuse/bin/reuse.py django-reuse.py
+ln -s django-reuse/bin/reuse.py reuse.py
 
 ##
-# FIXME: this should be moved to 'django-reuse.py init'
+# FIXME: this should be moved to 'reuse.py init'
 if [ `which svn` ]; then
     echo "svn exists ;) checking out Django-trunk..."
     svn co http://code.djangoproject.com/svn/django/trunk Django-trunk
@@ -101,8 +101,8 @@ wget http://media.djangoproject.com/releases/1.1/Django-1.1-beta-1.tar.gz
 tar zxvf Django-1.1-beta-1.tar.gz
 
 ##
-# Any further initialization will be handled by django-reuse.py
-python django-reuse.py init
+# Any further initialization will be handled by reuse.py
+python reuse.py init
 
 ##
 # Restore current working directory.
