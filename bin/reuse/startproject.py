@@ -150,6 +150,7 @@ def parse_args():
 
 if __name__ == "__main__":
     import re
+    import random
 
     pname, pdir = parse_args()
     tdir = template_dir("project")
@@ -159,6 +160,7 @@ if __name__ == "__main__":
             (r"$PROJECT_NAME_DOUBLE_DASH$", "".zfill(len(pname)).replace("0","=")),
             (r"$AUTHOR_NAME$",  raw_input('Please enter author\'s name:  ')),
             (r"$AUTHOR_EMAIL$", raw_input('Please enter author\'s email: ')),
+            (r"$SECRET_KEY$",   "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])),
           ]
 
     for tfile in tfiles:
