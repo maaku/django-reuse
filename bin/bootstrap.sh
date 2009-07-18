@@ -92,6 +92,11 @@ ln -s django-reuse/bin/reuse.py reuse.py
 if [ `which svn` ]; then
     echo "svn exists ;) checking out Django-trunk..."
     svn co http://code.djangoproject.com/svn/django/trunk Django-trunk
+elif [ `which git` ]; then
+    echo "git exists ;) checking out Django-trunk..."
+    git clone git://github.com/django/django.git 
+else
+    echo "neither svn nor git :( cannot checkout Django-trunk..."
 fi
 
 wget http://www.djangoproject.com/download/1.0.2/tarball/
