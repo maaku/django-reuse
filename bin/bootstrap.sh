@@ -32,6 +32,7 @@ fi
 # any problems.
 function parse_error() {
     echo "`basename $0`: try \``basename $0` --help\` for instructions."
+    exit -1
 }
 
 if [ $# -gt 1 ]; then
