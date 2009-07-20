@@ -90,6 +90,12 @@ ln -s django-reuse/bin/reuse.py reuse.py
 
 ##
 # FIXME: this should be moved to 'reuse.py init'
+wget http://www.djangoproject.com/download/1.0.2/tarball/
+tar zxvf Django-1.0.2-final.tar.gz
+
+wget http://media.djangoproject.com/releases/1.1/Django-1.1-beta-1.tar.gz
+tar zxvf Django-1.1-beta-1.tar.gz
+
 if [ `which svn` ]; then
     echo "svn exists ;) checking out Django-trunk..."
     svn co http://code.djangoproject.com/svn/django/trunk Django-trunk
@@ -100,11 +106,16 @@ else
     echo "neither svn nor git :( cannot checkout Django-trunk..."
 fi
 
-wget http://www.djangoproject.com/download/1.0.2/tarball/
-tar zxvf Django-1.0.2-final.tar.gz
-
-wget http://media.djangoproject.com/releases/1.1/Django-1.1-beta-1.tar.gz
-tar zxvf Django-1.1-beta-1.tar.gz
+if [ `which git` ]; then
+    echo "git exists ;) checking out django-extensions..."
+    git clone git://github.com/django-extensions/django-extensions.git
+else
+    echo "can't find git :( downloading django-extensions tarball..."
+    wget http://github.com/django-extensions/django-extensions/tarball/master
+    tar zxvf django-extensions-*.tar.gz
+    rm -f django-extensions-*.tar.gz
+    mv django-extensions-* django-extensions
+fi
 
 ##
 # Any further initialization will be handled by reuse.py
