@@ -57,13 +57,13 @@ pushd $1 > /dev/null
 
 ##
 # Some sanity checks... the directory django-reuse should not exist, nor
-# should the file reuse.py.
+# should the file manage.py.
 if [ -e "django-reuse" ]; then
     echo "`basename $0`: error, file/directory django-reuse already exists."
     exit
 fi
-if [ -e "reuse.py" ]; then
-    echo "`basename $0`: error, file/directory reuse.py already exists."
+if [ -e "manage.py" ]; then
+    echo "`basename $0`: error, file/directory manage.py already exists."
     exit
 fi
 
@@ -85,11 +85,11 @@ fi
 
 ##
 # Now the repository exists in the directory django-reuse.  We'll create a
-# symbolic link to the script django-reuse/bin/reuse.py
-ln -s django-reuse/bin/reuse.py reuse.py
+# symbolic link to the script django-reuse/bin/manage.py
+ln -s django-reuse/bin/manage.py manage.py
 
 ##
-# FIXME: this should be moved to 'reuse.py init'
+# FIXME: this should be moved to 'manage.py init'
 wget http://www.djangoproject.com/download/1.0.2/tarball/
 tar zxvf Django-1.0.2-final.tar.gz
 
@@ -118,8 +118,8 @@ else
 fi
 
 ##
-# Any further initialization will be handled by reuse.py
-python reuse.py init
+# Any further initialization will be handled by manage.py
+python manage.py init
 
 ##
 # Restore current working directory.
