@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 ##
-# django-reuse: bin/reuse.py
+# django-reuse: bin/manage.py
 #
 # A tool for managing reusable django applications, application dependencies,
 # projects which use reusable applications, and the creation of a development
@@ -18,7 +18,7 @@ VERSION_SHORT = ".".join((VERSION_MAJOR,VERSION_MINOR,VERSION_PATCH))
 VERSION_LONG  = "-".join((VERSION_SHORT,VERSION_BUILD))
 
 ##
-# For ease of maintainability, the functionlity of django-reuse.py is split
+# For ease of maintainability, the functionlity of this manage.py is split
 # across the bin/reuse module.  So the first thing we need to do is add this
 # module to PYTHONPATH.  A little bit of sys.path magic is all that's
 # required.
