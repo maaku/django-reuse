@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 ##
-# django-reuse: modmerge.py
+# django-reuse: reuse.modmerge
 ##
 
 import os
