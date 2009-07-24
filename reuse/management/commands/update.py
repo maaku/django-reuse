@@ -9,31 +9,6 @@
 docstring for update.py
 """
 
-# ##
-# # Boilerplate
-# import os
-# import sys
-# script     =                  sys.argv[1]
-# scriptbase = os.path.basename(sys.argv[1])
-# subcommand = os.path.basename(sys.argv[0])
-# subcommand = subcommand[:-len(".py")]
-# del sys.argv[1]
-#
-# ARGS = { "script":     scriptbase,
-#          "subcommand": subcommand }
-#
-# from subprocess import call
-# if __name__ == "__main__":
-#     if len(sys.argv) > 1:
-#         for opt in sys.argv[1:]:
-#             ARGS["opt"] = opt
-#             print ("""
-# %(subcommand)s: unrecognized option \'%(opt)s\'.
-# """% ARGS).strip()
-#         print ("""
-# %(subcommand)s: try \'%(script)s help %(subcommand)s\' for more information.
-# """% ARGS).strip(); sys.exit(-1)
-
 from django.core.management.base import NoArgsCommand
 
 import os
