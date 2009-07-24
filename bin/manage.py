@@ -24,12 +24,20 @@ VERSION_SHORT = ".".join((VERSION_MAJOR,VERSION_MINOR,VERSION_PATCH))
 VERSION_LONG  = "-".join((VERSION_SHORT,VERSION_BUILD))
 
 DJANGO_FOUND = False # A terrible hack
+DJANGO_EXTENSIONS_FOUND = False
+DJANGO_REUSE_FOUND = False
 def try_execute_from_cmdline():
     global DJANGO_FOUND
     if DJANGO_FOUND == False:
         try:
             from django.core.management import execute_from_command_line
             DJANGO_FOUND = True
+            from django.conf import settings
+            settings.configure(INSTALLED_APPS=())
+            if DJANGO_EXTENSIONS_FOUND == True:
+                settings.INSTALLED_APPS += ('django_extensions',)
+            if DJANGO_REUSE_FOUND == True:
+                settings.INSTALLED_APPS += ('reuse',)
             execute_from_command_line()
         except:
             pass
@@ -38,9 +46,27 @@ def try_execute_from_cmdline():
 # Guard against unintended imports
 if __name__ == "__main__":
 
+ import os
+ script      = os.path.realpath(__file__)
+ script_base = script[:-len(".py")]
+ script_dir  = os.path.dirname(script)
+ dev_root    = os.path.join(script_dir,'..','..')
+
 ##
 # FIXME: add the django-extensions module to the python path, and then apply
 # our own tweaks to the environment.
+
+ import sys
+
+ ext_path = os.path.join(dev_root,'django-extensions')
+ if os.path.isdir(ext_path):
+     sys.path.insert(0,ext_path)
+     DJANGO_EXTENSIONS_FOUND = True
+
+ ext_path = os.path.join(dev_root,'django-reuse')
+ if os.path.isdir(ext_path):
+     sys.path.insert(0,ext_path)
+     DJANGO_REUSE_FOUND = True
 
 ##
 # If there is a copy of Django installed in the default python path, we'll use
@@ -50,16 +76,10 @@ if __name__ == "__main__":
 
 ##
 # Otherwise we'll try to find a stable version of Django under the assumption
-# that this script is being called from a development environment that
+# that this script is being called from a development environment th
 # resembles one created by the bootstrap script.
 
- import os
- script      = os.path.realpath(__file__)
- script_base = script[:-len(".py")]
- script_dir  = os.path.dirname(script)
- dev_root    = os.path.join(script_dir,'..','..')
  dev_dirs    = [x for x in os.listdir(dev_root) if os.path.isdir(x)]
-
  # look for a final build...
  for dir in [x for x in dev_dirs if "final" in x]:
      sys.path.insert(0,dir)
@@ -80,7 +100,7 @@ if __name__ == "__main__":
 #script_base = script[:-len(".py")]
 #sys.path.insert(0,script_base)
 #
-#from django.core import management
+#from django.core import managemen
 #
 #if __name__ == "__main__":
 #    management.execute_from_command_line()

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 ##
-# reuse.__init__
+# reuse.management.commands.__init__
 ##
 
 ##
