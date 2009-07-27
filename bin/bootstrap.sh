@@ -93,8 +93,8 @@ ln -s django-reuse/bin/manage.py manage.py
 wget http://www.djangoproject.com/download/1.0.2/tarball/
 tar zxvf Django-1.0.2-final.tar.gz
 
-wget http://media.djangoproject.com/releases/1.1/Django-1.1-beta-1.tar.gz
-tar zxvf Django-1.1-beta-1.tar.gz
+wget http://media.djangoproject.com/releases/1.1/Django-1.1-rc-1.tar.gz
+tar zxvf Django-1.1-rc-1.tar.gz
 
 if [ `which svn` ]; then
     echo "svn exists ;) checking out Django-trunk..."
