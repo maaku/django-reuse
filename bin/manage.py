@@ -81,19 +81,14 @@ if __name__ == "__main__":
 # that this script is being called from a development environment th
 # resembles one created by the bootstrap script.
 
+ versions = ["final", "rc", "beta", "alpha", "trunk"]
  dev_dirs = [x for x in os.listdir(dev_root) if os.path.isdir(x)]
- # look for a final build...
- for dir in [x for x in dev_dirs if "final" in x]:
-     sys.path.insert(0,dir)
-     try_execute_from_cmdline()
- # ...otherwise a beta build...
- for dir in [x for x in dev_dirs if "beta" in x]:
-     sys.path.insert(0,dir)
-     try_execute_from_cmdline()
- # ...if not beta, let's live dangerously
- for dir in [x for x in dev_dirs if "trunk" in x]:
-     sys.path.insert(0,dir)
-     try_execute_from_cmdline()
+ # Look for a django source tree, and try executing the django command line
+ # admin interface.
+ for ver in versions:
+     for dir in [x for x in dev_dirs if ver in x]:
+         sys.path.insert(0,dir)
+         try_execute_from_cmdline()
 
 ##
 # End of File
