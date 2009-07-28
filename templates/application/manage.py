@@ -44,14 +44,11 @@ if __name__ == "__main__":
  # Now go through directory list looking for django-reuse or just reuse.
  path = ""
  for dir in dirs:
-     path = os.path.join(dir, "django-reuse")
-     if not os.path.isdir(path):
-         path = os.path.join(dir, "reuse")
-         if not os.path.isdir(path):
-             continue
-     file = os.path.join(path,"bin","manage.py")
+     file = os.path.join(dir, "django-reuse", "bin", "manage.py")
      if not os.path.isfile(file):
-         continue
+         file = os.path.join(dir, "reuse", "..", "bin", "manage.py")
+         if not os.path.isfile(file):
+             continue
      theproc = subprocess.Popen([sys.executable, file] + sys.argv[1:])
      theproc.communicate()
      sys.exit(0)
