@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 ##
-# django-reuse: bin/reuse/update.py
+# reuse.management.commands.update
 ##
 
 """
