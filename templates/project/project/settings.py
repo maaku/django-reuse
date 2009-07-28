@@ -117,7 +117,7 @@ if ADMIN_DOC == True:
 # Added by Mark Friedenbach 17 Jul 2009
 # load settings specific to this host machine/production environment
 try:
-    from local_settings import *
+    from settings_local import *
 except:
     pass
 
