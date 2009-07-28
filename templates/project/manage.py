@@ -5,38 +5,62 @@
 # manage.py
 ##
 
-# Added by Mark Friedenbach 15 Jul 2009
-# to support django project layout
-import sys
-sys.path.insert(0, '.')
-sys.path.insert(0, 'project')
-
-try:
-    from django.core.management import execute_manager
-except:
-    sys.stderr.write("""
-error: Can't find the django.core.management module.  Are you sure that you
-error: added Django to your installed python path, or a link to it in your
-error: project's root directory?
-""".lstrip())
-    sys.exit(1)
-
-try:
-    import settings # Assumed to be in the project directory.
-except ImportError:
-    sys.stderr.write("""
-error: Can't find the file 'settings.py' in the directory containing
-error: %r.
-error:
-error: It appears you've customized things.  You'll have to find and run
-error: django-admin.py manually, passing it your settings module.  (If the
-error: file settings.py does indeed exist, it's causing an ImportError
-error: somehow.)
-""".lstrip() % __file__)
-    sys.exit(1)
-
 if __name__ == "__main__":
-    execute_manager(settings)
+
+ ##
+ # Added by Mark Friedenbach 28 Jul 2009
+ #
+ # Add the project directory and module to the python path.
+ import os
+ import sys
+ import subprocess
+ DIRNAME = os.path.dirname(os.path.abspath(__file__))
+ sys.path.insert(0, DIRNAME)
+ sys.path.insert(0, os.path.join(DIRNAME, 'project'))
+
+ ##
+ # Added by Mark Friedenbach 28 Jul 2009
+ #
+ # We'll search all directories in the absolute and real paths, in that order,
+ # until we find a django-reuse directory that contains a bin/manage.py, which
+ # we'll execute with the same parameters that were passed to us.
+
+ def unwind_path(path):
+     if len(path) < 1 or path == os.sep:
+         return [path]
+     else:
+         return [path] + unwind_path(os.path.dirname(path))
+
+ dirs =        unwind_path(os.path.dirname(sys.argv[0]))
+ dirs = dirs + unwind_path(os.path.abspath(DIRNAME))
+ dirs = dirs + unwind_path(os.path.realpath(DIRNAME))
+
+ # Remove duplicates (and empties), but keep original order
+ temp = list(set(dirs))
+ temp.remove('')
+ temp.sort(cmp=lambda x,y: cmp(dirs.index(x), dirs.index(y)))
+ dirs = temp
+
+ # Now go through directory list looking for django-reuse or just reuse.
+ path = ""
+ for dir in dirs:
+     path = os.path.join(dir, "django-reuse")
+     if not os.path.isdir(path):
+         path = os.path.join(dir, "reuse")
+         if not os.path.isdir(path):
+             continue
+     file = os.path.join(path,"bin","manage.py")
+     if not os.path.isfile(file):
+         continue
+     theproc = subprocess.Popen([sys.executable, file] + sys.argv[1:])
+     theproc.communicate()
+     sys.exit(0)
+
+ sys.stderr.write("""
+error: Could not find django-reuse installation.  Are you sure that your
+error: development environment is setup correctly?
+""".lstrip())
+ sys.exit(1)
 
 ##
 # End of File
