@@ -82,12 +82,12 @@ if __name__ == "__main__":
 # resembles one created by the bootstrap script.
 
  versions = ["final", "rc", "beta", "alpha", "trunk"]
- dev_dirs = [x for x in os.listdir(dev_root) if os.path.isdir(x)]
+ dev_dirs = [x for x in os.listdir(dev_root) if os.path.isdir(os.path.join(dev_root,x))]
  # Look for a django source tree, and try executing the django command line
  # admin interface.
  for ver in versions:
      for dir in [x for x in dev_dirs if ver in x]:
-         sys.path.insert(0,dir)
+         sys.path.insert(0,os.path.join(dev_root,dir))
          try_execute_from_cmdline()
 
 ##
