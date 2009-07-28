@@ -5,6 +5,11 @@
 # project.settings
 ##
 
+##
+# Standard Django settings.py boilerplate
+import os
+DIRNAME = os.path.dirname(os.path.realpath(__file__))
+
 # Django settings for $PROJECT_NAME$.
 
 DEBUG = True
@@ -56,7 +61,7 @@ USE_I18N = True
 # Added by Mark Friedenbach 15 Jul 2009
 # to support media serving for development purposes
 import os
-MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','static'))
+MEDIA_ROOT = os.path.join(DIRNAME,'..','static')
 MEDIA_SERVE = True
 MEDIA_URL = '/media/'
 
@@ -109,8 +114,10 @@ if ADMIN_DOC == True:
     INSTALLED_APPS = ('django.contrib.admindoc',
         ) + INSTALLED_APPS
 
+# Added by Mark Friedenbach 17 Jul 2009
+# load settings specific to this host machine/production environment
 try:
-    from settings_local import *
+    from local_settings import *
 except:
     pass
 
