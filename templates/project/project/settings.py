@@ -111,7 +111,7 @@ if ADMIN == True:
     INSTALLED_APPS = ('django.contrib.admin',
         ) + INSTALLED_APPS
 if ADMIN_DOC == True:
-    INSTALLED_APPS = ('django.contrib.admindoc',
+    INSTALLED_APPS = ('django.contrib.admindocs',
         ) + INSTALLED_APPS
 
 # Added by Mark Friedenbach 17 Jul 2009
