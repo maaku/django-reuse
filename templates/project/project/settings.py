@@ -56,7 +56,7 @@ USE_I18N = True
 # Added by Mark Friedenbach 15 Jul 2009
 # to support media serving for development purposes
 import os
-MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','media'))
+MEDIA_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','static'))
 MEDIA_SERVE = True
 MEDIA_URL = '/media/'
 
