@@ -46,8 +46,8 @@ def dir_walk(dir):
     while len(dirs)>0:
         dir = dirs.pop()
         for name in os.listdir(dir):
-            # Hack: ignore .git and .svn folders, and .gitignore file
-            if (name == ".git") or (name == ".svn") or (name == ".gitignore"):
+            # Hack: ignore any hidden files
+            if name.startswith("."):
                 continue
             fullpath = os.path.join(dir, name)
             if os.path.isfile(fullpath):
