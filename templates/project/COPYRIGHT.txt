@@ -2,7 +2,8 @@
 : $PROJECT_NAME$: COPYRIGHT.txt
 ::
 
-If you have contributed to $PROJECT_NAME$, you deserve to be on this list.  Contact us (see: AUTHORS.txt) and we'll add you.
+If you have contributed to this project, you deserve to be on this list.
+Contact us (see: AUTHORS.txt) and we'll add you.
 
 $PROJECT_NAME$ is Copyright (C) 2009 by the following:
 
