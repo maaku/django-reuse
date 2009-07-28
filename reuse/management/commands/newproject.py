@@ -24,7 +24,8 @@ already exists.
 
 ##
 # Boilerplate
-from django.core.management.base import LabelCommand
+from django.core.management.base import LabelCommand, CommandError
+from optparse import make_option
 
 import os
 subcommand = os.path.basename(__file__)
@@ -56,8 +57,12 @@ def dir_walk(dir):
                 dirs.append(fullpath)
     return fils
 
-def template_dir(name):
-    return os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","..","..","templates",name)
+##
+# template_dir() returns a path to the template directory in the django-reuse
+# distribution.  It assumes that the template directory can be found relative
+# to this source file.
+def template_dir():
+    return os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","..","..","templates")
 
 ##
 # Checks that a directory is safe to use as the target of a directory copy
@@ -69,7 +74,7 @@ def is_safe_pdir(pdir, tname):
     safe = True
 
     if os.path.exists(pdir):
-        tdir = template_dir(tname)
+        tdir = os.path.join(template_dir(), tname)
         # Sanity check
         if not os.path.exists(tdir):
             print ("""
@@ -94,92 +99,52 @@ def is_safe_pdir(pdir, tname):
 
     return safe
 
-##
-# Command line processing.  The format of the command line for newproject is
-# just complex enough to make this difficult to read, but also too simple to
-# justify an external command line parser.
-#
-# See the docstring at the head of this file for a description of the command
-# line structure of newproject.
-def parse_args():
-    fail = False
-
-    if len(sys.argv) > 1:
-        for opt in sys.argv[1:]:
-            if opt[0] == '-':
-                fail = True
-                ARGS["opt"] = opt
-                sys.argv.remove(opt)
-                print ("""
-%(subcommand)s: unrecognized option \'%(opt)s\'.
-"""% ARGS).strip()
-
-    if len(sys.argv) > 1:
-        pname = sys.argv[1]
-    else:
-        pname = raw_input("Enter project name: ")
-
-    if len(sys.argv) > 2:
-        pdir = sys.argv[2]
-    else:
-        pdir = "-".join(["proj",pname])
-
-    if not is_safe_pdir(pdir, "project"):
-        fail = True
-        ARGS["pdir"] = pdir
-        print ("""
-%(subcommand)s: \'%(pdir)s\' cannot be used as a project directory.
-"""% ARGS).strip()
-
-    if len(sys.argv) > 3:
-        fail = True
-        print ("""
-%(subcommand)s: too many arguments (expected max. 2).
-"""% ARGS).strip()
-
-    if fail == True:
-        print ("""
-%(subcommand)s: try \'%(script)s help %(subcommand)s\' for more information.
-"""% ARGS).strip(); sys.exit(-1)
-
-    return pname, pdir
-
 class Command(LabelCommand):
+    help = """
+Creates a reusable Django project directory structure for the given project
+name in the current directory.
+""".strip()
     option_list = LabelCommand.option_list + (
         make_option('-u', '--author',
                     action='store', dest='author',
                     default='Ada Lovelace',
-                    help='Author\'s name.'),
+                    help="""
+Author's name.
+""".strip()),
         make_option('-m', '--email',
                     action='store', dest='email',
                     default='ada@westminster.ac.uk',
-                    help='Author\'s primary email address.'),
+                    help="""
+Author's primary email address.
+""".strip()),
     )
-    help = "Creates a reusable Django project directory structure for the given project name in the current directory."
+
     args = "[projectname]"
     label = "project name"
 
-    # Can't import settings during this command, because they haven't
-    # necessarily been created.
     can_import_settings = False
     requires_model_validation = False
     output_transaction = False
 
-    def handle_label(self, project_name, **options):
-        print "testing"
-        return "testing"
+    def handle_label(self, pname, **options):
         import re
         import random
         import shutil
 
-        pname, pdir = parse_args()
-        tdir = template_dir("project")
+        pdir = "-".join(["proj",pname])
+        if not is_safe_pdir(pdir,pname):
+            ARGS["pdir"] = pdir
+            raise CommandError("""
+\'%(pdir)s\' cannot be used as a project directory.
+"""% ARGS).strip()
+
+        tdir = os.path.join(template_dir(),"project")
         tfiles = set(dir_walk(tdir))
 
         res = [ (r"$PROJECT_NAME$", pname),
                 (r"$PROJECT_NAME_DOUBLE_DASH$", "".zfill(len(pname)).replace("0","=")),
-                (r"$AUTHOR_NAME$",  raw_input('Please enter author\'s name:  ')),
-                (r"$AUTHOR_EMAIL$", raw_input('Please enter author\'s email: ')),
+                (r"$AUTHOR_NAME$",  options.get('author')),
+                (r"$AUTHOR_EMAIL$", options.get('email')),
                 (r"$SECRET_KEY$",   "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])),
               ]
 
