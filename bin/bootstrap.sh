@@ -42,8 +42,12 @@ fi
 
 if [ $# -eq 1 ]; then
     if [ ! -d $1 ]; then
-        echo "`basename $0`: error, \"$1\" does not exist or is not a directory."
-        parse_error
+        if [ ! -e $1 ]; then
+            mkdir $1
+        else
+            echo "`basename $0`: error, \"$1\" does not exist or is not a directory."
+            parse_error
+        fi
     fi
 else
     $1 = "."
