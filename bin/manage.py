@@ -32,16 +32,16 @@ def try_execute_manager():
         try:
             from django.core.management import execute_manager
             try:
-                import settings
+                import project.settings as settings
             except:
                 from django.conf import settings
                 settings.configure(INSTALLED_APPS=())
+            DJANGO_FOUND = True
             if DJANGO_EXTENSIONS_FOUND == True:
                 settings.INSTALLED_APPS += ('django_extensions',)
             if DJANGO_REUSE_FOUND == True:
                 settings.INSTALLED_APPS += ('reuse',)
             execute_manager(settings)
-            DJANGO_FOUND = True
         except:
             pass
 
@@ -77,7 +77,12 @@ if __name__ == "__main__":
 # See if we're called from the context of a project, or if Django is installed
 # on the default python path, and launch the command manager.
 
+ DIRNAME = os.path.abspath(os.path.dirname(__file__))
+ sys.path.insert(0, DIRNAME)
+ sys.path.insert(0, os.path.join(DIRNAME, 'project'))
  try_execute_manager()
+ sys.path.pop(0)
+ sys.path.pop(0)
 
 ##
 # Otherwise we'll try to find a stable version of Django under the assumption
