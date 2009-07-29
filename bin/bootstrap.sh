@@ -94,7 +94,7 @@ fi
 ln -s django-reuse/bin/manage.py manage.py
 
 ##
-# FIXME: this should be moved to 'manage.py init'
+# FIXME: this should be moved to 'manage.py bootstrap'
 wget http://www.djangoproject.com/download/1.0.2/tarball/
 tar zxvf Django-1.0.2-final.tar.gz
 
@@ -124,7 +124,7 @@ fi
 
 ##
 # Any further initialization will be handled by manage.py
-python manage.py init
+python manage.py bootstrap
 
 ##
 # Restore current working directory.
