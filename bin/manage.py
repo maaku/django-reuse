@@ -32,7 +32,7 @@ def try_execute_manager():
         try:
             from django.core.management import execute_manager
             try:
-                import project.settings as settings
+                from project import settings
             except:
                 from django.conf import settings
                 settings.configure(INSTALLED_APPS=())
@@ -81,8 +81,8 @@ if __name__ == "__main__":
  sys.path.insert(0, DIRNAME)
  sys.path.insert(0, os.path.join(DIRNAME, 'project'))
  try_execute_manager()
- sys.path.pop(0)
- sys.path.pop(0)
+ sys.path.pop(0) # "./project"
+ sys.path.pop(0) # "."
 
 ##
 # Otherwise we'll try to find a stable version of Django under the assumption
