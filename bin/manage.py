@@ -26,19 +26,22 @@ VERSION_LONG  = "-".join((VERSION_SHORT,VERSION_BUILD))
 DJANGO_FOUND = False # A terrible hack
 DJANGO_EXTENSIONS_FOUND = False
 DJANGO_REUSE_FOUND = False
-def try_execute_from_cmdline():
+def try_execute_manager():
     global DJANGO_FOUND
     if DJANGO_FOUND == False:
         try:
-            from django.core.management import execute_from_command_line
-            DJANGO_FOUND = True
-            from django.conf import settings
-            settings.configure(INSTALLED_APPS=())
+            from django.core.management import execute_manager
+            try:
+                import settings
+            except:
+                from django.conf import settings
+                settings.configure(INSTALLED_APPS=())
             if DJANGO_EXTENSIONS_FOUND == True:
                 settings.INSTALLED_APPS += ('django_extensions',)
             if DJANGO_REUSE_FOUND == True:
                 settings.INSTALLED_APPS += ('reuse',)
-            execute_from_command_line()
+            execute_manager(settings)
+            DJANGO_FOUND = True
         except:
             pass
 
@@ -71,32 +74,14 @@ if __name__ == "__main__":
      DJANGO_REUSE_FOUND = True
 
 ##
-# See if we're called from the context of a project, and if so launch the
-# command manager.
+# See if we're called from the context of a project, or if Django is installed
+# on the default python path, and launch the command manager.
 
- try:
-     import project.settings
-     try:
-         from django.core.management import execute_manager
-         execute_manager(project.settings)
-     except:
-         # Failed for some reason.  Perhaps settings was not an actual Django
-         # settings module?  We'll continue as if we were not called from a
-         # project context.
-         pass
- except:
-     # Could not find settings module; assume non-project setting.
-     pass
-
-##
-# If there is a copy of Django installed in the default python path, we'll use
-# that.
-
- try_execute_from_cmdline()
+ try_execute_manager()
 
 ##
 # Otherwise we'll try to find a stable version of Django under the assumption
-# that this script is being called from a development environment th
+# that this script is being called from a development environment that
 # resembles one created by the bootstrap script.
 
  versions = ["final", "rc", "beta", "alpha", "trunk"]
@@ -106,7 +91,7 @@ if __name__ == "__main__":
  for ver in versions:
      for dir in [x for x in dev_dirs if ver in x]:
          sys.path.insert(0,os.path.join(dev_root,dir))
-         try_execute_from_cmdline()
+         try_execute_manager()
 
 ##
 # End of File
