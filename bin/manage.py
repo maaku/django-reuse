@@ -71,6 +71,24 @@ if __name__ == "__main__":
      DJANGO_REUSE_FOUND = True
 
 ##
+# See if we're called from the context of a project, and if so launch the
+# command manager.
+
+ try:
+     import project.settings
+     try:
+         from django.core.management import execute_manager
+         execute_manager(project.settings)
+     except:
+         # Failed for some reason.  Perhaps settings was not an actual Django
+         # settings module?  We'll continue as if we were not called from a
+         # project context.
+         pass
+ except:
+     # Could not find settings module; assume non-project setting.
+     pass
+
+##
 # If there is a copy of Django installed in the default python path, we'll use
 # that.
 
