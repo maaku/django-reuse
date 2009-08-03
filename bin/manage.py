@@ -66,7 +66,7 @@ if __name__ == "__main__":
 # See if we're called from the context of a project, or if Django is installed
 # on the default python path, and launch the command manager.
 
- if os.path.isfile("./django/bin/django-admin.py") and os.path.isfile("./project/settings.py"):
+ if os.path.isfile(os.path.join('.','django','bin','django-admin.py')) and os.path.isfile(os.path.join('.','project','settings.py')):
      DIRNAME = os.path.abspath(os.path.dirname(__file__))
      sys.path.insert(0, DIRNAME)
      sys.path.insert(0, os.path.join(DIRNAME, 'apps'))
@@ -81,6 +81,7 @@ if __name__ == "__main__":
          settings.INSTALLED_APPS += ('reuse',)
 
      execute_manager(settings)
+     sys.exit(0)
 
 ##
 # Otherwise we'll try to find a stable version of Django under the assumption
@@ -136,6 +137,7 @@ if __name__ == "__main__":
          settings.INSTALLED_APPS += ('reuse',)
 
      execute_manager(settings)
+     sys.exit(0)
 
  # No Django installation... epic fail.
  else:
