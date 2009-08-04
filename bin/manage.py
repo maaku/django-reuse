@@ -29,16 +29,22 @@ if __name__ == "__main__":
 # development.
 
  import sys
+ EXTRA_APPS = ()
 
  ext_path = os.path.join(dev_root,'django-extensions')
  if os.path.isdir(ext_path):
      sys.path.insert(0,ext_path)
-     DJANGO_EXTENSIONS_FOUND = True
+     EXTRA_APPS = EXTRA_APPS + ('django_extensions',)
 
  ext_path = os.path.join(dev_root,'django-reuse')
  if os.path.isdir(ext_path):
      sys.path.insert(0,ext_path)
-     DJANGO_REUSE_FOUND = True
+     EXTRA_APPS = EXTRA_APPS + ('reuse',)
+
+ ext_path = os.path.join(dev_root,'django-south')
+ if os.path.isdir(ext_path):
+     sys.path.insert(0,ext_path)
+     EXTRA_APPS = EXTRA_APPS + ('south',)
 
 ##
 # See if we're called from the context of a project, or if Django is installed
@@ -53,11 +59,7 @@ if __name__ == "__main__":
      from django.core.management import execute_manager
      from project import settings
 
-     if DJANGO_EXTENSIONS_FOUND == True:
-         settings.INSTALLED_APPS += ('django_extensions',)
-     if DJANGO_REUSE_FOUND == True:
-         settings.INSTALLED_APPS += ('reuse',)
-
+     settings.INSTALLED_APPS += EXTRA_APPS
      execute_manager(settings)
      sys.exit(0)
 
@@ -109,11 +111,7 @@ if __name__ == "__main__":
      from django.conf import settings
 
      settings.configure(INSTALLED_APPS=())
-     if DJANGO_EXTENSIONS_FOUND == True:
-         settings.INSTALLED_APPS += ('django_extensions',)
-     if DJANGO_REUSE_FOUND == True:
-         settings.INSTALLED_APPS += ('reuse',)
-
+     settings.INSTALLED_APPS += EXTRA_APPS
      execute_manager(settings)
      sys.exit(0)
 
