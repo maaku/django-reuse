@@ -53,7 +53,7 @@ and the most common tools and applications.
             label_output = self.handle_label(label, **options)
             if label_output:
                 output.append(label_output)
-        return '\n'.join(ouput)
+        return '\n'.join(output)
 
     def handle_label(self, label, **options):
         pass
