@@ -42,7 +42,7 @@ and the most common tools and applications.
     requires_model_validation = False
     output_transaction = False
 
-    def handle(self, *labels, **options)
+    def handle(self, *labels, **options):
         if not labels:
             # This next line is the only difference from LabelCommand.  If
             # only there were an easier way to override this behavior...
