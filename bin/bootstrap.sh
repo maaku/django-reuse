@@ -105,10 +105,20 @@ if [ `which svn` ]; then
     echo "svn exists ;) checking out Django-trunk..."
     svn co http://code.djangoproject.com/svn/django/trunk Django-trunk
 elif [ `which git` ]; then
-    echo "git exists ;) checking out Django-trunk..."
+    echo "no svn, but git exists ;) checking out Django-trunk..."
     git clone git://github.com/django/django.git 
 else
     echo "neither svn nor git :( cannot checkout Django-trunk..."
+fi
+
+if [ `which hg` ]; then
+    echo "hg exists ;) checking out django-south..."
+    hg clone http://bitbucket.org/andrewgodwin/south/ django-south
+elif [ `which git` ]; then
+    echo "no hg, but git exists ;) checking out django-south..."
+    git clone git://github.com/andrewgodwin/south.git
+else
+    echo "neither hg nor git exists :( cannot checkout Django-south..."
 fi
 
 if [ `which git` ]; then
