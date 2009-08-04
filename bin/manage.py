@@ -13,28 +13,6 @@
 # django command extensions mechanism.
 ##
 
-DJANGO_FOUND = False # A terrible hack
-DJANGO_EXTENSIONS_FOUND = False
-DJANGO_REUSE_FOUND = False
-def try_execute_manager():
-    global DJANGO_FOUND
-    if DJANGO_FOUND == False:
-        try:
-            from django.core.management import execute_manager
-            try:
-                from project import settings
-            except:
-                from django.conf import settings
-                settings.configure(INSTALLED_APPS=())
-            DJANGO_FOUND = True
-            if DJANGO_EXTENSIONS_FOUND == True:
-                settings.INSTALLED_APPS += ('django_extensions',)
-            if DJANGO_REUSE_FOUND == True:
-                settings.INSTALLED_APPS += ('reuse',)
-            execute_manager(settings)
-        except:
-            pass
-
 ##
 # Guard against unintended imports
 if __name__ == "__main__":
