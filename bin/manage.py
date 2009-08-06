@@ -46,10 +46,6 @@ if __name__ == "__main__":
      sys.path.insert(0,ext_path)
      EXTRA_APPS = EXTRA_APPS + ('south',)
 
- ext_path = os.path.join(dev_root,'pinax','apps')
- if os.path.isdir(ext_path):
-     sys.path.insert(0,ext_path)
-
 ##
 # See if we're called from the context of a project, or if Django is installed
 # on the default python path, and launch the command manager.
