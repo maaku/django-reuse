@@ -51,7 +51,7 @@ if __name__ == "__main__":
 # on the default python path, and launch the command manager.
 
  if os.path.isfile(os.path.join('.','django','bin','django-admin.py')) and os.path.isfile(os.path.join('.','project','settings.py')):
-     DIRNAME = os.path.abspath(os.path.dirname(__file__))
+     DIRNAME = os.path.abspath('.')
      sys.path.insert(0, DIRNAME)
      sys.path.insert(0, os.path.join(DIRNAME, 'apps'))
      sys.path.insert(0, os.path.join(DIRNAME, 'project'))
