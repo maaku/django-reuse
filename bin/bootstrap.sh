@@ -96,17 +96,20 @@ ln -s django-reuse/bin/manage.py manage.py
 ##
 # FIXME: this should be moved to 'manage.py bootstrap'
 wget http://www.djangoproject.com/download/1.1/tarball/
-tar zxvf Django-1.1-rc-1.tar.gz
+tar zxvf Django-1.1.tar.gz
+mv Django-1.1 Django-1.1-final
 
 wget http://www.djangoproject.com/download/1.0.3/tarball/
-tar zxvf Django-1.0.3-final.tar.gz
+tar zxvf Django-1.0.3.tar.gz
+mv Django-1.0.3 Django-1.0.3-final
 
 if [ `which svn` ]; then
     echo "svn exists ;) checking out Django-trunk..."
     svn co http://code.djangoproject.com/svn/django/trunk Django-trunk
 elif [ `which git` ]; then
     echo "no svn, but git exists ;) checking out Django-trunk..."
-    git clone git://github.com/django/django.git 
+    git clone git://github.com/django/django.git
+    mv django Django-trunk 
 else
     echo "neither svn nor git :( cannot checkout Django-trunk..."
 fi
