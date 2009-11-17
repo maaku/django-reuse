@@ -145,6 +145,17 @@ if [ `which wget` ]; then
     mv virtualenv-1.4.2 virtualenv
 fi
 
+if [ `which hg` ]; then
+    echo "hg exists ;) checking out virtualenvwrapper..."
+    hg clone http://bitbucket.org/dhellmann/virtualenvwrapper/
+else
+    echo "can't find hg :( downloading virtualenvwrapper tarball..."
+    wget http://www.doughellmann.com/downloads/virtualenvwrapper-1.21.tar.gz
+    tar zxvf virtualenvwrapper-1.21.tar.gz
+    rm -f virtualenvwrapper-1.21.tar.gz
+    mv virtualenvwrapper-1.21 virtualenvwrapper
+fi
+
 ##
 # Any further initialization will be handled by manage.py
 python manage.py bootstrap
