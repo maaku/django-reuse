@@ -137,6 +137,14 @@ else
     mv django-extensions-* django-extensions
 fi
 
+if [ `which wget` ]; then
+    echo "downloading virtualenv tarball..."
+    wget http://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.4.2.tar.gz#md5=7b1a10f0e84dd945c9b006ace1e1bb16
+    tar zxvf virtualenv-1.4.2.tar.gz
+    rm -f virtualenv-1.4.2.tar.gz
+    mv virtualenv-1.4.2 virtualenv
+fi
+
 ##
 # Any further initialization will be handled by manage.py
 python manage.py bootstrap
