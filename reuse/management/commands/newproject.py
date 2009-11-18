@@ -147,7 +147,7 @@ Template to use.
 \'%(pdir)s\' cannot be used as a project directory.
 """% ARGS).strip()
 
-        tdir = os.path.join(template_dir(),"proj")
+        tdir = os.path.join(template_dir(),"proj",options.get('template'))
         tfiles = set(dir_walk(tdir))
 
         res = [ (r"$PROJECT_NAME$", pname),
