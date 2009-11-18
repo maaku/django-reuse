@@ -117,6 +117,12 @@ Author's name.
                     help="""
 Author's primary email address.
 """.strip()),
+        make_option('-t', '--template',
+                    action='store', dest='template',
+                    default='basic',
+                    help="""
+Template to use.
+""".strip()),
     )
 
     args = "[projectname]"
