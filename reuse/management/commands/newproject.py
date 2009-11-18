@@ -32,15 +32,16 @@ subcommand = os.path.basename(__file__)
 subcommand = subcommand[:-len(".py")]
 ARGS = { "subcommand": subcommand }
 
-##
-# dir_walk() takes a single directory as an argument and returns a list of all
-# the files found by walking that directory hierarchy.  The relative paths of
-# those files are included, but not the original directory.
-#
-# This function is used by is_safe_pdir() to see if there is any overlap
-# between pdir (the user specified project directory) and tdir (the template
-# directory which contains the skeleton project).
 def dir_walk(dir):
+    """
+    dir_walk() takes a single directory as an argument and returns a list of
+    all the files found by walking that directory hierarchy.  The relative
+    paths of those files are included, but not the original directory.
+
+    This function is used by is_safe_pdir() to see if there is any overlap
+    between pdir (the user specified project directory) and tdir (the template
+    directory which contains the skeleton project).
+    """
     fils = []
     dirs = [dir]
     pfix = os.path.join(dir, '')
@@ -57,20 +58,22 @@ def dir_walk(dir):
                 dirs.append(fullpath)
     return fils
 
-##
-# template_dir() returns a path to the template directory in the django-reuse
-# distribution.  It assumes that the template directory can be found relative
-# to this source file.
 def template_dir():
+    """
+    template_dir() returns a path to the template directory in the
+    django-reuse distribution.  It assumes that the template directory can be
+    found relative to this source file.
+    """
     return os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","..","..","templates")
 
-##
-# Checks that a directory is safe to use as the target of a directory copy
-# operation.  Namely, it checks that the template directory exists, and that
-# if the target directory exists that there are no name conflicts between both
-# directory structures.  In technical speak, it makes sure that the set
-# intersection of the two deep file hierarchies is zero..
 def is_safe_pdir(pdir, tname):
+    """
+    Checks that a directory is safe to use as the target of a directory copy
+    operation.  Namely, it checks that the template directory exists, and that
+    if the target directory exists that there are no name conflicts between
+    both directory structures.  In technical speak, it makes sure that the set
+    intersection of the two deep file hierarchies is zero..
+    """
     safe = True
 
     if os.path.exists(pdir):
