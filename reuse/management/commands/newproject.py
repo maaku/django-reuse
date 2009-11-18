@@ -138,7 +138,7 @@ Author's primary email address.
 \'%(pdir)s\' cannot be used as a project directory.
 """% ARGS).strip()
 
-        tdir = os.path.join(template_dir(),"project")
+        tdir = os.path.join(template_dir(),"proj")
         tfiles = set(dir_walk(tdir))
 
         res = [ (r"$PROJECT_NAME$", pname),
