@@ -3,15 +3,17 @@
 
 ##
 # django-reuse: bin/manage.py
-#
-# An interface to django-admin.py which adds capability to manage reusable
-# django applications, application dependencies, projects which use reusable
-# applications, and the creation of a development environment that encourages
-# and supports reusability.
-#
-# We do this by replacing existing commands and hooking in new ones using the
-# django command extensions mechanism.
 ##
+
+"""
+An interface to django-admin.py which adds capability to manage reusable
+django applications, application dependencies, projects which use reusable
+applications, and the creation of a development environment that encourages
+and supports reusability.
+
+We do this by replacing existing commands and hooking in new ones using the
+django command extensions mechanism.
+"""
 
 ##
 # Guard against unintended imports
@@ -22,11 +24,12 @@ if __name__ == "__main__":
  bin_dir  = os.path.dirname(script)
  dev_root = os.path.join(bin_dir,'..','..')
 
-##
-# Django command extensions are used to extend the capability of Django's
-# built-in django-admin.py.  By default we use a suite of community provided
-# extensions, as well as our own extensions targetted at reusable application
-# development.
+ ##
+ # Django command extensions are used to extend the capability of Django's
+ # built-in django-admin.py.  By default we use a suite of community provided
+ # extensions, as well as our own extensions targetted at reusable application
+ # development.
+ ##
 
  import sys
  EXTRA_APPS = ()
@@ -46,9 +49,10 @@ if __name__ == "__main__":
      sys.path.insert(0,ext_path)
      EXTRA_APPS = EXTRA_APPS + ('south',)
 
-##
-# See if we're called from the context of a project, or if Django is installed
-# on the default python path, and launch the command manager.
+ ##
+ # See if we're called from the context of a project, or if Django is
+ # installed on the default python path, and launch the command manager.
+ ##
 
  if os.path.isfile(os.path.join('.','django','bin','django-admin.py')) and os.path.isfile(os.path.join('.','project','settings.py')):
      DIRNAME = os.path.abspath('.')
@@ -63,10 +67,11 @@ if __name__ == "__main__":
      execute_manager(settings)
      sys.exit(0)
 
-##
-# Otherwise we'll try to find a stable version of Django under the assumption
-# that this script is being called from a development environment that
-# resembles one created by the bootstrap script.
+ ##
+ # Otherwise we'll try to find a stable version of Django under the assumption
+ # that this script is being called from a development environment that
+ # resembles one created by the bootstrap script.
+ ##
 
  # temp is a bad name.. but it is a variable that has a lot of different uses
  # in the following code (maybe 'misc' would be better?).  By the time we get
