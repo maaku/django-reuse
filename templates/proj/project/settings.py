@@ -9,6 +9,8 @@
 # Standard Django settings.py boilerplate
 import os
 DIRNAME = os.path.dirname(os.path.realpath(__file__))
+PROJDIR = os.path.join(DIRNAME, 'project')
+APPSDIR = os.path.join(DIRNAME, 'apps')
 
 # Django settings for $PROJECT_NAME$.
 
