@@ -218,10 +218,18 @@ Virtual environment for '%(pname)s' already exists at '%(virtualdir)s'.
             file.close()
             shutil.copymode(tfilename,pfilename)
         
+        # Create virtual environment
         virtualenv = os.path.join(basedir,'virtualenv','virtualenv.py')
         call([sys.executable,virtualenv,'--no-site-packages',virtualdir])
+        
+        # Link to source code within virtual environment
         os.symlink(os.path.join('..','..',pdir),
                    os.path.join(virtualdir,'proj'))
+        
+        # Fetch and install requirements
+        call([os.path.join(virtualdir,'bin','python'),
+              os.path.join(virtualdir,'bin','pip'),
+              'install', '-r', os.path.join(pdir, 'requirements.txt')])
 
 ##
 # End of File
