@@ -63,6 +63,9 @@ def dir_walk(dir):
     between pdir (the user specified project directory) and tdir (the template
     directory which contains the skeleton project).
     """
+    if not os.path.isdir(dir):
+        return []
+    
     fils = []
     dirs = [dir]
     pfix = os.path.join(dir, '')
@@ -87,7 +90,7 @@ def template_dir():
     """
     return os.path.join(os.path.dirname(os.path.realpath(__file__)),"..","..","..","templates")
 
-def is_safe_pdir(pdir, tname):
+def is_safe_pdir(pdir, tdir):
     """
     Checks that a directory is safe to use as the target of a directory copy
     operation.  Namely, it checks that the template directory exists, and that
@@ -98,13 +101,12 @@ def is_safe_pdir(pdir, tname):
     safe = True
 
     if os.path.exists(pdir):
-        tdir = os.path.join(template_dir(), tname)
         # Sanity check
         if not os.path.exists(tdir):
             print ("""
 %(subcommand)s: project template directory could not be found.
 %(subcommand)s: this should never happen!  please file a bug report.
-%(subcommand0s: ignore any errors that follow.              
+%(subcommand)s: ignore any errors that follow.              
 """% ARGS).strip()
             safe = False
 
@@ -160,30 +162,50 @@ Template to use.
         import re
         import random
         import shutil
-
-        pdir = "-".join(["proj",pname])
-        if not is_safe_pdir(pdir,pname):
-            ARGS["pdir"] = pdir
-            raise CommandError("""
-\'%(pdir)s\' cannot be used as a project directory.
+        import os
+        import sys
+        from subprocess import call
+        
+        basedir = os.path.join(os.path.dirname(__file__),'..','..','..','..')
+        basedir = os.path.abspath(basedir)
+        virtualdir = os.path.join(basedir,'.virtualenv',pname)
+        if os.path.exists(virtualdir):
+            ARGS["pname"]      = pname
+            ARGS["virtualdir"] = virtualdir
+            print ("""
+%(subcommand)s: virtual environment '%(pname)s' already exists!
+%(subcommand)s:
+%(subcommand)s: %(subcommand)s is cowardly refusing to overwrite existing
+%(subcommand)s: files.  please change your project name or remove these files
+%(subcommand)s: before continuing.
 """% ARGS).strip()
-
+            raise CommandError(("""
+Virtual environment for '%(pname)s' already exists at '%(virtualdir)s'.
+"""% ARGS).strip())
+        
+        pdir = "-".join(["proj",pname])
         tdir = os.path.join(template_dir(),"proj",options.get('template'))
         tfiles = set(dir_walk(tdir))
-
+        
+        if not is_safe_pdir(pdir,tdir):
+            ARGS["pdir"] = pdir
+            raise CommandError(("""
+'%(pdir)s' cannot be used as a project directory.
+"""% ARGS).strip())
+        
         res = [ (r"$PROJECT_NAME$", pname),
                 (r"$PROJECT_NAME_DOUBLE_DASH$", "".zfill(len(pname)).replace("0","=")),
                 (r"$AUTHOR_NAME$",  options.get('author')),
                 (r"$AUTHOR_EMAIL$", options.get('email')),
                 (r"$SECRET_KEY$",   "".join([random.choice("abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)") for i in range(50)])),
               ]
-
+        
         for tfile in tfiles:
             try:
                 os.makedirs(os.path.dirname(os.path.join(pdir,tfile)))
             except:
                 pass
-
+            
             tfilename = os.path.join(tdir,tfile)
             pfilename = os.path.join(pdir,tfile)
             file = open(tfilename,"r")
@@ -195,6 +217,11 @@ Template to use.
             file.write(text)
             file.close()
             shutil.copymode(tfilename,pfilename)
+        
+        virtualenv = os.path.join(basedir,'virtualenv','virtualenv.py')
+        call([sys.executable,virtualenv,'--no-site-packages',virtualdir])
+        os.symlink(os.path.join('..','..',pdir),
+                   os.path.join(virtualdir,'proj'))
 
 ##
 # End of File
