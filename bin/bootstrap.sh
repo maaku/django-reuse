@@ -117,15 +117,15 @@ ln -s django-reuse/bin/manage.py manage.py
 
 ##
 # FIXME: this should be moved to 'manage.py bootstrap'
-wget http://www.djangoproject.com/download/1.1/tarball/
-tar zxvf Django-1.1.tar.gz
-mv Django-1.1.tar.gz Django-1.1-final.tar.gz
-mv Django-1.1 Django-1.1-final
+wget http://www.djangoproject.com/download/1.1.1/tarball/
+tar zxvf Django-1.1.1.tar.gz
+mv Django-1.1.1.tar.gz Django-1.1.1-final.tar.gz
+mv Django-1.1.1 Django-1.1.1
 
-wget http://www.djangoproject.com/download/1.0.3/tarball/
-tar zxvf Django-1.0.3.tar.gz
-mv Django-1.0.3.tar.gz Django-1.0.3-final.tar.gz
-mv Django-1.0.3 Django-1.0.3-final
+wget http://www.djangoproject.com/download/1.0.4/tarball/
+tar zxvf Django-1.0.4.tar.gz
+mv Django-1.0.4.tar.gz Django-1.0.4-final.tar.gz
+mv Django-1.0.4 Django-1.0.4-final
 
 if [ `which svn` ]; then
     echo "svn exists ;) checking out Django-trunk..."
