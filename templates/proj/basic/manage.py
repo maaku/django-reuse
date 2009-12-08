@@ -37,6 +37,7 @@ if __name__ == "__main__":
  import subprocess
  DIRNAME = os.path.dirname(os.path.abspath(__file__))
  sys.path.insert(0, DIRNAME)
+ sys.path.insert(0, os.path.join(DIRNAME, 'apps'))
  sys.path.insert(0, os.path.join(DIRNAME, 'project'))
 
  ##
@@ -70,7 +71,9 @@ if __name__ == "__main__":
          file = os.path.join(dir, "reuse", "..", "bin", "manage.py")
          if not os.path.isfile(file):
              continue
-     theproc = subprocess.Popen([sys.executable, file] + sys.argv[1:])
+     envs = os.environ
+     envs['PYTHONPATH'] = ":".join(sys.path)
+     theproc = subprocess.Popen([sys.executable, file] + sys.argv[1:], cwd=DIRNAME, env=envs)
      theproc.communicate()
      sys.exit(0)
 
